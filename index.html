@@ -517,7 +517,6 @@ function handleNoFloat() {
 
 function goToYesPage() {
   if (window._rogueInterval) { clearInterval(window._rogueInterval); window._rogueInterval = null; }
-  history.pushState({}, '', '/yes');
   fireConfetti();
   document.getElementById('noBtnFloat').style.display = 'none';
   setTimeout(() => {
