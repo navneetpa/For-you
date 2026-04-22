@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>💌 Tumhare liye kuch special hai...</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#e8475f;--blush:#fce4ec;--cream:#fff6f0;--deep:#3a1c2c;
+  --gold:#c9956a;
+}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--cream);
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+}
+
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:480px){
+  .card{padding:36px 18px 28px;border-radius:20px;width:96%;}
+  .question{font-size:1.05rem;margin-bottom:18px;}
+  .gif-wrap img{height:155px;}
+  .stamp{font-size:2.2rem;}
+  .btn-yes{padding:12px 26px;font-size:.96rem;}
+  .btn-no{padding:10px 20px;font-size:.84rem;}
+  #noBtnFloat{padding:10px 20px;font-size:.84rem;}
+  #yes-page{padding:36px 18px;}
+  #yes-page h2{font-size:1.38rem;}
+  #yes-page p{font-size:.92rem;}
+}
+
+/* ── HEARTS BG ── */
+.hearts-bg{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.hf{position:absolute;opacity:0;animation:floatUp linear infinite;}
+@keyframes floatUp{
+  0%{transform:translateY(110vh) rotate(-15deg);opacity:0}
+  10%{opacity:.35}90%{opacity:.15}
+  100%{transform:translateY(-10vh) rotate(15deg);opacity:0}
+}
+
+/* ── CARD ── */
+.card{
+  position:relative;z-index:1;
+  background:#fff;
+  border:2px solid #f5c6d0;border-radius:28px;
+  padding:44px 36px 36px;
+  max-width:430px;width:93%;
+  text-align:center;
+  box-shadow:0 24px 70px rgba(232,71,95,.13),0 4px 16px rgba(0,0,0,.06);
+  animation:cardIn .8s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes cardIn{from{transform:scale(.75) translateY(40px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+
+.ribbon{
+  position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:var(--rose);color:#fff;font-size:.7rem;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:4px 20px;border-radius:20px;font-family:'Nunito',sans-serif;
+  white-space:nowrap;
+}
+
+.stamp{font-size:2.8rem;display:block;margin-bottom:10px;animation:pulse 1.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+
+.gif-wrap{
+  border-radius:16px;overflow:hidden;margin-bottom:22px;
+  border:2px solid #f5c6d0;background:var(--blush);
+}
+.gif-wrap img{width:100%;height:190px;object-fit:cover;display:block;}
+
+.question{
+  font-family:'Playfair Display',serif;font-size:1.2rem;
+  color:var(--deep);margin-bottom:24px;line-height:1.5;
+  white-space:pre-line;
+}
+
+/* ── BUTTONS WRAP ── */
+.btns{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;min-height:60px;}
+
+/* ── YES BUTTON ── */
+.btn-yes{
+  background:var(--rose);color:#fff;border:none;border-radius:50px;
+  padding:13px 36px;font-size:1.05rem;font-family:'Playfair Display',serif;font-weight:700;
+  cursor:pointer;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s;
+  box-shadow:0 6px 22px rgba(232,71,95,.38);letter-spacing:.5px;
+  display:inline-block;
+}
+.btn-yes:hover{filter:brightness(1.08);}
+.btn-yes:active{filter:brightness(.95);}
+
+/* ── STATIC NO BUTTON (slides 1-8) ── */
+.btn-no{
+  background:var(--rose);color:#fff;
+  border:2px solid var(--rose);border-radius:50px;
+  padding:11px 26px;font-size:.92rem;
+  cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600;
+  transition:filter .2s, transform .2s;
+  white-space:nowrap;
+  display:inline-block;
+  box-shadow:0 4px 14px rgba(232,71,95,.28);
+}
+.btn-no:hover{filter:brightness(1.08);}
+.btn-no:active{filter:brightness(.93);}
+
+/* ── FLOATING NO BUTTON (date stages 9-15) ── */
+#noBtnFloat{
+  background:var(--rose);color:#fff;
+  border:2px solid var(--rose);border-radius:50px;
+  padding:11px 26px;font-size:.92rem;
+  cursor:pointer;font-family:'Nunito',sans-serif;font-weight:600;
+  white-space:nowrap;
+  position:fixed;z-index:200;
+  display:none;
+  box-shadow:0 4px 14px rgba(232,71,95,.28);
+  /* min readable size even when scaled down */
+  min-width:80px;
+  transition: left .32s cubic-bezier(.34,1.56,.64,1),
+              top  .32s cubic-bezier(.34,1.56,.64,1),
+              transform .35s, opacity .35s;
+}
+#noBtnFloat:hover{filter:brightness(1.08);}
+
+.no-msg{font-size:.78rem;color:#d4a0b0;margin-top:10px;min-height:20px;transition:opacity .3s;}
+
+/* ── PROGRESS DOTS ── */
+.progress{display:flex;gap:7px;justify-content:center;margin-bottom:18px;}
+.dot{width:8px;height:8px;border-radius:50%;background:#f5c6d0;transition:background .3s,transform .3s;}
+.dot.active{background:var(--rose);transform:scale(1.3);}
+.dot.done{background:#f0a0b4;}
+
+/* ── YES PAGE ── */
+#yes-page{
+  display:none;position:relative;z-index:1;
+  background:#fff;border:2px solid #f5c6d0;border-radius:28px;
+  padding:44px 36px;max-width:430px;width:93%;
+  text-align:center;
+  box-shadow:0 24px 70px rgba(232,71,95,.16);
+  animation:cardIn .8s cubic-bezier(.34,1.56,.64,1) both;
+}
+#yes-page .big-heart{font-size:4.5rem;display:block;margin-bottom:14px;animation:heartBeat .5s ease-in-out 4;}
+@keyframes heartBeat{0%,100%{transform:scale(1)}30%{transform:scale(1.35)}60%{transform:scale(.92)}}
+#yes-page h2{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--deep);margin-bottom:10px;}
+#yes-page p{color:#8a5060;font-size:.98rem;line-height:1.65;font-weight:400;margin-bottom:22px;}
+#yes-page .gif-wrap img{height:175px;}
+
+/* ── CONFETTI ── */
+.cp{position:fixed;pointer-events:none;animation:cfFall 2.6s ease-in forwards;z-index:999;}
+@keyframes cfFall{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+  100%{transform:translateY(110vh) rotate(800deg);opacity:0}
+}
+
+/* ── SOUND BTN ── */
+.sound-btn{
+  position:fixed;bottom:18px;right:18px;
+  background:#fff;border:2px solid #f5c6d0;border-radius:50%;
+  width:44px;height:44px;font-size:1.2rem;cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);z-index:10;transition:transform .2s;
+}
+.sound-btn:hover{transform:scale(1.1);}
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- ═══════════ MAIN CARD ═══════════ -->
+<div class="card" id="main-card">
+  <div class="ribbon" id="ribbon-text">Tumhare liye 💌</div>
+  <span class="stamp" id="card-stamp">🎂</span>
+  <div class="progress" id="progress-dots"></div>
+  <div class="gif-wrap">
+    <img id="card-gif" src="https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif" alt="cute"/>
+  </div>
+  <p class="question" id="card-question">Loading...</p>
+  <div class="btns" id="btns-wrap">
+    <button class="btn-yes" id="yesBtn" onclick="handleYes()">Haan! 💕</button>
+    <button class="btn-no"  id="noBtn"  onclick="handleNo()">Nahi</button>
+  </div>
+  <p class="no-msg" id="no-msg"></p>
+</div>
+
+<!-- Floating No button for date stages -->
+<button id="noBtnFloat" onclick="handleNoFloat()">Nahi</button>
+
+<!-- ═══════════ YES PAGE ═══════════ -->
+<div id="yes-page">
+  <div class="ribbon">Mujhe pata tha! 💖</div>
+  <span class="big-heart">💖</span>
+  <h2>Mujhe pata tha tumhe date karna pasand karega! 🌹</h2>
+  <p>Honestly? Jab se maine tumhe dekha tab se mann mein tha ki ek baar pooch ke dekhein 😊<br/><br/>
+  Ab toh pakka koi acchi si jagah dhundhni padegi hum dono ke liye! ✨</p>
+  <div class="gif-wrap">
+    <img src="https://media.tenor.com/LhAyeCDp32EAAAAM/happy-dance.gif" alt="yay" style="height:175px;object-fit:cover;"/>
+  </div>
+</div>
+
+<button class="sound-btn" id="soundBtn" onclick="toggleSound()">🔇</button>
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg"/>
+</audio>
+
+<script>
+/* ═══════════════════════════════════════════
+   SLIDES 0–8  (normal flow)
+   type "single"  = only Yes button shown
+   type "yesno"   = both buttons, both advance
+   type "date2"   = slide 8, both shown; Yes→yes-page, No→enter date stages
+═══════════════════════════════════════════ */
+const slides = [
+  {
+    ribbon:"Aaj ka din khaas hai 🎂", stamp:"🎂",
+    gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
+    question:"Happy Birthday!! 🎉\nAaj tumhara din hai aur main chahta tha ki tumhe specially wish karun — tum bahut khaas ho aur deserve karti ho sabse best birthday! 🌸",
+    yesText:"Thank you 🥹", noText:"", type:"single",
+  },
+  {
+    ribbon:"Sach poochna chahta tha 💫", stamp:"✨",
+    gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
+    question:"Seriously yaar... jab tum hasty ho toh poora room lit up ho jaata hai. Tumhari smile genuinely contagious hai. Believe karte ho? 😊",
+    yesText:"Aww haan! 🥰", noText:"Nahi believeta", type:"yesno",
+  },
+  {
+    ribbon:"Tumhare baare mein 💭", stamp:"🌸",
+    gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
+    question:"Kya tum thoda adventurous types ho? Matlab naye naye jagah jaana, naya try karna — yeh sab pasand hai tumhe? 🌍",
+    yesText:"Haan bilkul! 🌟", noText:"Naah, ghar > sab", type:"yesno",
+  },
+  {
+    ribbon:"Aur batao... 🤔", stamp:"💭",
+    gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
+    question:"Kya tum woh type ho jo midnight mein ice cream khane nikal jaati ho? 🍦 (No judgment, actually impressive lagta hai 😂)",
+    yesText:"100% main hi hu 😂", noText:"Nahi yaar, neend pyaari", type:"yesno",
+  },
+  {
+    ribbon:"Last personality check 😄", stamp:"🌙",
+    gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
+    question:"Kya tumhara dil soft hai — matlab koi sad movie dekho toh secretly aansu aa jaate hain? 🥲",
+    yesText:"Haan... shhh 🤫", noText:"Main toh stone hu", type:"yesno",
+  },
+  {
+    ribbon:"Ab meri baari 😅", stamp:"🙈",
+    gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
+    question:"Honest raho — kya tum mujhe thoda cute samajhti ho? Even 10% cute? 🐣",
+    yesText:"Hmm thoda toh hai 😏", noText:"Nahi bhai, nahi", type:"yesno",
+  },
+  {
+    ribbon:"Seedha question 😬", stamp:"💬",
+    gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
+    question:"Kya tum mujhe ek accha dost maanti ho? Matlab kisi emergency mein call karti toh main aata — yeh believeable lagta hai? 😄",
+    yesText:"Haan lagta hai! 😊", noText:"Nahi trust nahi", type:"yesno",
+  },
+  {
+    ribbon:"Last meri wali 🥺", stamp:"🤞",
+    gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
+    question:"Kya tumhe lagta hai ki main ek acha time dene wala insaan hu? Jaise boring nahi karunga — pinky promise! 😂",
+    yesText:"Believeable hai! 😄", noText:"Doubt hai mujhe", type:"yesno",
+  },
+  // ── SLIDE 8: DATE QUESTION ──
+  {
+    ribbon:"Ek important sawaal 🌹", stamp:"💌",
+    gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
+    question:"Toh... yeh sab poochne ke baad — kya tum mere saath ek baar date pe chalogi? 🌹✨",
+    yesText:"Haan Chalo! 💕", noText:"Nahi 😶", type:"date2",
+  },
+];
+
+/* ═══════════════════════════════════════════
+   DATE STAGES (after No on slide 8)
+   7 stages total → slides 9-15
+   Stage 6 = rogue mode (no flees, can't click)
+═══════════════════════════════════════════ */
+const dateStages = [
+  {
+    ribbon:"Soch lo dobara 🥺", stamp:"🥺",
+    question:"Ek baar soch lo... main bahut accha time deta hun, promise! 🥺",
+    yesText:"Haan Chalo!! 🌹",
+    noText:"Soch rahi hu...",
+    msg:"Socho zyada mat, dil kya kehta hai? 💭",
+  },
+  {
+    ribbon:"Ek mauka do na... ☕", stamp:"☕",
+    question:"Dekho yaar, ek cup coffee ke liye bhi nahi? Sirf ek chance do na! ☕",
+    yesText:"HAAN CHALO!! 💖",
+    noText:"Pata nahi...",
+    msg:"'Pata nahi' matlab almost haan hota hai 😂",
+  },
+  {
+    ribbon:"Pinky promise! 🤙", stamp:"🤙",
+    question:"Main promise karta hu — agar boring laga toh tum walk out kar sakti ho! Deal? 😄",
+    yesText:"Haan Bilkul!! 🌸",
+    noText:"Shayad nahi...",
+    msg:"'Shayad nahi' se 'Shayad haan' bahut paas hai 👀",
+  },
+  {
+    ribbon:"Tum deserve karti ho 🌟", stamp:"🌟",
+    question:"Seriously yaar, tum deserve karti ho ek accha din... main woh din banana chahta hun 🌟",
+    yesText:"Haan Pakka!! ✨",
+    noText:"Hmm...",
+    msg:"Woh 'Hmm' mujhe bahut hope de raha hai 😍",
+  },
+  {
+    ribbon:"Birthday gift consider karo 🎁", stamp:"🎁",
+    question:"Yaar dekho... birthday pe ek date ka gift nahi dunga kya tujhe? 🎁😂",
+    yesText:"Abhi HAAN Bolo!! 🎉",
+    noText:"Dekho baad mein",
+    msg:"Baad mein kab? Main yahi hun toh! 😄",
+  },
+  {
+    ribbon:"Last request 🙏", stamp:"🙏",
+    question:"Okay last request — ek baar haan bol do, phir chahe na aana date pe 😭 (jk please aana)",
+    yesText:"HAAN HAAN HAAN!! 💘",
+    noText:"Ek Last Chance?",
+    msg:"Yeh last chance hai... seriously ab 😬",
+  },
+  // stage 6 → ROGUE: no button flees on touch/hover, click disabled
+  {
+    ribbon:"Bol do Haan please 😭", stamp:"😭",
+    question:"Okay ab yeh 'Nahi' button ne bhi sunna band kar diya 😂\nSirf Haan wala kaam karega!",
+    yesText:"HAAN ZAROOR!! 💕🎊",
+    noText:"Bol do Haan 🙏",
+    msg:"(Yeh button ab nahi sunta tumhara 😂 sirf Haan wala sunta hai)",
+  },
+];
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let currentSlide  = 0;
+let dateStageIdx  = -1;   // -1 = not in date mode
+let inDateMode    = false;
+let yesScale      = 1.0;
+let noScale       = 1.0;
+let noIsRogue     = false;
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+window.onload = () => {
+  buildHearts();
+  buildDots();
+  renderSlide(0);
+};
+
+/* ── DOTS (slides 1–8 = 8 dots) ── */
+function buildDots() {
+  const p = document.getElementById('progress-dots');
+  p.innerHTML = '';
+  for (let i = 1; i <= 8; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.id = 'dot-' + i;
+    p.appendChild(d);
+  }
+}
+function updateDots(activeIdx) {
+  for (let i = 1; i <= 8; i++) {
+    const d = document.getElementById('dot-' + i);
+    if (!d) continue;
+    d.className = 'dot' + (i < activeIdx ? ' done' : i === activeIdx ? ' active' : '');
+  }
+}
+
+/* ── ANIMATE CARD ── */
+function animateCard() {
+  const card = document.getElementById('main-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'cardIn .5s cubic-bezier(.34,1.56,.64,1) both';
+}
+
+/* ═══════════════════════════════════════════
+   RENDER NORMAL SLIDE (0–8)
+═══════════════════════════════════════════ */
+function renderSlide(idx) {
+  inDateMode = false;
+  noIsRogue  = false;
+  currentSlide = idx;
+
+  const s = slides[idx];
+  document.getElementById('ribbon-text').textContent   = s.ribbon;
+  document.getElementById('card-stamp').textContent    = s.stamp;
+  document.getElementById('card-gif').src              = s.gif;
+  document.getElementById('card-question').textContent = s.question;
+  document.getElementById('no-msg').textContent        = '';
+
+  const yesBtn     = document.getElementById('yesBtn');
+  const noBtn      = document.getElementById('noBtn');
+  const noBtnFloat = document.getElementById('noBtnFloat');
+
+  // hide float button
+  noBtnFloat.style.display = 'none';
+
+  // reset yes
+  yesBtn.textContent     = s.yesText;
+  yesBtn.style.transform = 'scale(1)';
+  yesScale = 1.0;
+
+  if (s.type === 'single') {
+    noBtn.style.display = 'none';
+  } else {
+    noBtn.style.display   = 'inline-block';
+    noBtn.textContent     = s.noText;
+    noBtn.style.transform = 'scale(1)';
+    noBtn.style.opacity   = '1';
+    noScale = 1.0;
+  }
+
+  updateDots(idx);
+  animateCard();
+}
+
+/* ═══════════════════════════════════════════
+   RENDER DATE STAGE (9–15)
+═══════════════════════════════════════════ */
+function renderDateStage(stageIdx) {
+  inDateMode   = true;
+  dateStageIdx = stageIdx;
+
+  const st = dateStages[stageIdx];
+  document.getElementById('ribbon-text').textContent   = st.ribbon;
+  document.getElementById('card-stamp').textContent    = st.stamp;
+  document.getElementById('card-question').textContent = st.question;
+  document.getElementById('no-msg').textContent        = st.msg;
+
+  const yesBtn     = document.getElementById('yesBtn');
+  const noBtn      = document.getElementById('noBtn');
+  const noBtnFloat = document.getElementById('noBtnFloat');
+
+  // Static no hidden; float shown
+  noBtn.style.display      = 'none';
+  noBtnFloat.style.display = 'block';
+  noBtnFloat.textContent   = st.noText;
+
+  // Yes grows
+  yesScale = Math.min(1.0 + stageIdx * 0.18, 2.15);
+  yesBtn.textContent     = st.yesText;
+  yesBtn.style.transform = `scale(${yesScale})`;
+  yesBtn.style.boxShadow = `0 ${6+stageIdx*3}px ${22+stageIdx*7}px rgba(232,71,95,${Math.min(0.38+stageIdx*0.05,0.75)})`;
+
+  // No shrinks — min 0.65 so text stays readable
+  noScale = Math.max(1.0 - stageIdx * 0.06, 0.65);
+  noBtnFloat.style.transform = `scale(${noScale})`;
+  noBtnFloat.style.opacity   = String(Math.max(1.0 - stageIdx * 0.07, 0.55));
+
+  // Only stage 6 → rogue (moves + unclickable). Stages 0-5 just click normally, no movement.
+  if (stageIdx >= 6) {
+    noIsRogue = true;
+    noBtnFloat.onclick      = null;
+    noBtnFloat.onmouseover  = moveNoBtn;
+    noBtnFloat.ontouchstart = (e) => { e.preventDefault(); moveNoBtn(); };
+    noBtnFloat.style.cursor = 'default';
+    // Keep moving to random spot every 1.5s while rogue
+    if (!window._rogueInterval) {
+      window._rogueInterval = setInterval(moveNoBtn, 1500);
+    }
+  } else {
+    noIsRogue = false;
+    noBtnFloat.onclick      = handleNoFloat;
+    noBtnFloat.onmouseover  = null;
+    noBtnFloat.ontouchstart = null;
+    noBtnFloat.style.cursor = 'pointer';
+    if (window._rogueInterval) { clearInterval(window._rogueInterval); window._rogueInterval = null; }
+  }
+
+  // Position float button
+  if (stageIdx === 0) {
+    // First time: place near card
+    placeNoBtnNearCard();
+  } else if (stageIdx >= 6) {
+    moveNoBtn();
+  }
+  // stages 1-5: button stays where it is (no movement)
+
+  updateDots(8);
+  animateCard();
+}
+
+/* ═══════════════════════════════════════════
+   BUTTON HANDLERS
+═══════════════════════════════════════════ */
+function handleYes() {
+  // Any stage → yes page
+  if (inDateMode || slides[currentSlide].type === 'date2') {
+    goToYesPage();
+    return;
+  }
+  if (currentSlide < slides.length - 1) {
+    renderSlide(currentSlide + 1);
+  }
+}
+
+function handleNo() {
+  const s = slides[currentSlide];
+  if (s.type === 'date2') {
+    // First No on slide 8 → enter date mode stage 0
+    renderDateStage(0);
+    return;
+  }
+  // Normal slides: both yes and no advance
+  if (currentSlide < slides.length - 1) {
+    renderSlide(currentSlide + 1);
+  }
+}
+
+function handleNoFloat() {
+  if (noIsRogue) return;
+  const next = Math.min(dateStageIdx + 1, dateStages.length - 1);
+  renderDateStage(next);
+}
+
+function goToYesPage() {
+  if (window._rogueInterval) { clearInterval(window._rogueInterval); window._rogueInterval = null; }
+  history.pushState({}, '', '/yes');
+  fireConfetti();
+  document.getElementById('noBtnFloat').style.display = 'none';
+  setTimeout(() => {
+    document.getElementById('main-card').style.display = 'none';
+    document.getElementById('yes-page').style.display  = 'block';
+  }, 400);
+}
+
+/* ═══════════════════════════════════════════
+   PLACE NO FLOAT NEAR CARD (initial)
+═══════════════════════════════════════════ */
+function placeNoBtnNearCard() {
+  const btn  = document.getElementById('noBtnFloat');
+  const card = document.getElementById('main-card');
+  const cr   = card.getBoundingClientRect();
+  btn.style.transition = 'none';
+  // Place below card, right-aligned
+  const x = Math.min(cr.right - 130, window.innerWidth - (btn.offsetWidth||110) - 20);
+  const y = cr.bottom + 12;
+  btn.style.left = Math.max(x, 20) + 'px';
+  btn.style.top  = Math.min(y, window.innerHeight - 60) + 'px';
+  // Re-enable transition after placement
+  setTimeout(() => {
+    btn.style.transition = 'left .32s cubic-bezier(.34,1.56,.64,1), top .32s cubic-bezier(.34,1.56,.64,1), transform .35s, opacity .35s';
+  }, 50);
+}
+
+
+function moveNoBtn() {
+  const btn    = document.getElementById('noBtnFloat');
+  const margin = 22;
+  const bw     = btn.offsetWidth  || 110;
+  const bh     = btn.offsetHeight || 46;
+  const maxX   = Math.max(window.innerWidth  - bw  - margin, margin + 2);
+  const maxY   = Math.max(window.innerHeight - bh  - margin, margin + 2);
+  btn.style.left = (margin + Math.random() * (maxX - margin)) + 'px';
+  btn.style.top  = (margin + Math.random() * (maxY - margin)) + 'px';
+}
+
+/* ═══════════════════════════════════════════
+   FLOATING HEARTS
+═══════════════════════════════════════════ */
+function buildHearts() {
+  const bg     = document.getElementById('heartsBg');
+  const emojis = ['💕','💖','💗','🌸','✨','💝','🌹','🎂'];
+  for (let i = 0; i < 20; i++) {
+    const h = document.createElement('span');
+    h.className = 'hf';
+    h.textContent = emojis[i % emojis.length];
+    h.style.left              = `${Math.random() * 100}%`;
+    h.style.fontSize          = `${1 + Math.random() * 1.6}rem`;
+    h.style.animationDuration = `${6 + Math.random() * 9}s`;
+    h.style.animationDelay    = `${Math.random() * 9}s`;
+    bg.appendChild(h);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   CONFETTI
+═══════════════════════════════════════════ */
+const cfColors = ['#e8475f','#f5c6d0','#ffd700','#ff8fab','#c9956a','#fff0f3','#ffb3c1'];
+function fireConfetti() {
+  for (let i = 0; i < 100; i++) setTimeout(spawnC, i * 25);
+}
+function spawnC() {
+  const el = document.createElement('div');
+  el.className = 'cp';
+  el.style.left             = `${Math.random() * 100}vw`;
+  el.style.background       = cfColors[Math.floor(Math.random() * cfColors.length)];
+  el.style.borderRadius     = Math.random() > .5 ? '50%' : '3px';
+  const sz = 6 + Math.random() * 10;
+  el.style.width = el.style.height  = sz + 'px';
+  el.style.animationDuration        = `${1.5 + Math.random() * 2}s`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3800);
+}
+
+/* ═══════════════════════════════════════════
+   SOUND
+═══════════════════════════════════════════ */
+let playing = false;
+function toggleSound() {
+  const a = document.getElementById('bgMusic');
+  const b = document.getElementById('soundBtn');
+  if (playing) { a.pause(); b.textContent = '🔇'; }
+  else { a.play().catch(() => {}); b.textContent = '🔊'; }
+  playing = !playing;
+}
+
+window.addEventListener('popstate', () => {
+  if (location.pathname !== '/yes') {
+    document.getElementById('yes-page').style.display  = 'none';
+    document.getElementById('main-card').style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>
