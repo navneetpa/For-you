@@ -22,16 +22,25 @@ body{
 
 /* ── MOBILE RESPONSIVE ── */
 @media(max-width:480px){
-  .card{padding:36px 18px 28px;border-radius:20px;width:96%;}
-  .question{font-size:1.05rem;margin-bottom:18px;}
-  .gif-wrap img{height:155px;}
-  .stamp{font-size:2.2rem;}
-  .btn-yes{padding:12px 26px;font-size:.96rem;}
-  .btn-no{padding:10px 20px;font-size:.84rem;}
-  #noBtnFloat{padding:10px 20px;font-size:.84rem;}
-  #yes-page{padding:36px 18px;}
-  #yes-page h2{font-size:1.38rem;}
-  #yes-page p{font-size:.92rem;}
+  .card{padding:28px 14px 20px;border-radius:16px;width:92%;}
+  .ribbon{font-size:.58rem;padding:3px 14px;top:-11px;}
+  .stamp{font-size:1.6rem;margin-bottom:6px;}
+  .gif-wrap{margin-bottom:12px;}
+  .gif-wrap img{height:110px;}
+  .question{font-size:.85rem;margin-bottom:14px;line-height:1.45;}
+  .btns{gap:8px;}
+  .btn-yes{padding:9px 20px;font-size:.82rem;}
+  .btn-no{padding:8px 16px;font-size:.75rem;}
+  #noBtnFloat{padding:8px 16px;font-size:.75rem;}
+  .no-msg{font-size:.7rem;}
+  .dot{width:6px;height:6px;}
+  .progress{gap:5px;margin-bottom:12px;}
+  #yes-page{padding:28px 14px;}
+  #yes-page .big-heart{font-size:3rem;margin-bottom:10px;}
+  #yes-page h2{font-size:1.1rem;margin-bottom:8px;}
+  #yes-page p{font-size:.82rem;margin-bottom:14px;}
+  #yes-page .gif-wrap img{height:120px;}
+  .sound-btn{width:36px;height:36px;font-size:1rem;bottom:12px;right:12px;}
 }
 
 /* ── HEARTS BG ── */
@@ -118,7 +127,6 @@ body{
   position:fixed;z-index:200;
   display:none;
   box-shadow:0 4px 14px rgba(232,71,95,.28);
-  /* min readable size even when scaled down */
   min-width:80px;
   transition: left .32s cubic-bezier(.34,1.56,.64,1),
               top  .32s cubic-bezier(.34,1.56,.64,1),
@@ -207,12 +215,6 @@ body{
 </audio>
 
 <script>
-/* ═══════════════════════════════════════════
-   SLIDES 0–8  (normal flow)
-   type "single"  = only Yes button shown
-   type "yesno"   = both buttons, both advance
-   type "date2"   = slide 8, both shown; Yes→yes-page, No→enter date stages
-═══════════════════════════════════════════ */
 const slides = [
   {
     ribbon:"Aaj ka din khaas hai 🎂", stamp:"🎂",
@@ -262,7 +264,6 @@ const slides = [
     question:"Kya tumhe lagta hai ki main ek acha time dene wala insaan hu? Waise bore nahi karunga pinky promise! 😂",
     yesText:"Believeable hai! 😄", noText:"Doubt hai mujhe", type:"yesno",
   },
-  // ── SLIDE 8: DATE QUESTION ──
   {
     ribbon:"Ek important sawaal 🌹", stamp:"💌",
     gif:"https://media.tenor.com/EBV7OT7ACfwAAAAj/u-u-qua-qua-u-quaa.gif",
@@ -271,11 +272,6 @@ const slides = [
   },
 ];
 
-/* ═══════════════════════════════════════════
-   DATE STAGES (after No on slide 8)
-   7 stages total → slides 9-15
-   Stage 6 = rogue mode (no flees, can't click)
-═══════════════════════════════════════════ */
 const dateStages = [
   {
     ribbon:"Soch lo dobara 🥺", stamp:"🥺",
@@ -319,7 +315,6 @@ const dateStages = [
     noText:"Ek Last Chance?",
     msg:"Yeh last chance hai... seriously ab 😬",
   },
-  // stage 6 → ROGUE: no button flees on touch/hover, click disabled
   {
     ribbon:"Bol do Haan please 😭", stamp:"😭",
     question:"Okay ab yeh 'Nahi' button ne bhi sunna band kar diya 😂\nSirf Haan wala kaam karega!",
@@ -329,26 +324,19 @@ const dateStages = [
   },
 ];
 
-/* ═══════════════════════════════════════════
-   STATE
-═══════════════════════════════════════════ */
 let currentSlide  = 0;
-let dateStageIdx  = -1;   // -1 = not in date mode
+let dateStageIdx  = -1;
 let inDateMode    = false;
 let yesScale      = 1.0;
 let noScale       = 1.0;
 let noIsRogue     = false;
 
-/* ═══════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════ */
 window.onload = () => {
   buildHearts();
   buildDots();
   renderSlide(0);
 };
 
-/* ── DOTS (slides 1–8 = 8 dots) ── */
 function buildDots() {
   const p = document.getElementById('progress-dots');
   p.innerHTML = '';
@@ -367,7 +355,6 @@ function updateDots(activeIdx) {
   }
 }
 
-/* ── ANIMATE CARD ── */
 function animateCard() {
   const card = document.getElementById('main-card');
   card.style.animation = 'none';
@@ -375,9 +362,6 @@ function animateCard() {
   card.style.animation = 'cardIn .5s cubic-bezier(.34,1.56,.64,1) both';
 }
 
-/* ═══════════════════════════════════════════
-   RENDER NORMAL SLIDE (0–8)
-═══════════════════════════════════════════ */
 function renderSlide(idx) {
   inDateMode = false;
   noIsRogue  = false;
@@ -394,10 +378,8 @@ function renderSlide(idx) {
   const noBtn      = document.getElementById('noBtn');
   const noBtnFloat = document.getElementById('noBtnFloat');
 
-  // hide float button
   noBtnFloat.style.display = 'none';
 
-  // reset yes
   yesBtn.textContent     = s.yesText;
   yesBtn.style.transform = 'scale(1)';
   yesScale = 1.0;
@@ -416,9 +398,6 @@ function renderSlide(idx) {
   animateCard();
 }
 
-/* ═══════════════════════════════════════════
-   RENDER DATE STAGE (9–15)
-═══════════════════════════════════════════ */
 function renderDateStage(stageIdx) {
   inDateMode   = true;
   dateStageIdx = stageIdx;
@@ -433,30 +412,25 @@ function renderDateStage(stageIdx) {
   const noBtn      = document.getElementById('noBtn');
   const noBtnFloat = document.getElementById('noBtnFloat');
 
-  // Static no hidden; float shown
   noBtn.style.display      = 'none';
   noBtnFloat.style.display = 'block';
   noBtnFloat.textContent   = st.noText;
 
-  // Yes grows
   yesScale = Math.min(1.0 + stageIdx * 0.18, 2.15);
   yesBtn.textContent     = st.yesText;
   yesBtn.style.transform = `scale(${yesScale})`;
   yesBtn.style.boxShadow = `0 ${6+stageIdx*3}px ${22+stageIdx*7}px rgba(232,71,95,${Math.min(0.38+stageIdx*0.05,0.75)})`;
 
-  // No shrinks — min 0.65 so text stays readable
   noScale = Math.max(1.0 - stageIdx * 0.06, 0.65);
   noBtnFloat.style.transform = `scale(${noScale})`;
   noBtnFloat.style.opacity   = String(Math.max(1.0 - stageIdx * 0.07, 0.55));
 
-  // Only stage 6 → rogue (moves + unclickable). Stages 0-5 just click normally, no movement.
   if (stageIdx >= 6) {
     noIsRogue = true;
     noBtnFloat.onclick      = null;
     noBtnFloat.onmouseover  = moveNoBtn;
     noBtnFloat.ontouchstart = (e) => { e.preventDefault(); moveNoBtn(); };
     noBtnFloat.style.cursor = 'default';
-    // Keep moving to random spot every 1.5s while rogue
     if (!window._rogueInterval) {
       window._rogueInterval = setInterval(moveNoBtn, 1500);
     }
@@ -469,24 +443,17 @@ function renderDateStage(stageIdx) {
     if (window._rogueInterval) { clearInterval(window._rogueInterval); window._rogueInterval = null; }
   }
 
-  // Position float button
   if (stageIdx === 0) {
-    // First time: place near card
     placeNoBtnNearCard();
   } else if (stageIdx >= 6) {
     moveNoBtn();
   }
-  // stages 1-5: button stays where it is (no movement)
 
   updateDots(8);
   animateCard();
 }
 
-/* ═══════════════════════════════════════════
-   BUTTON HANDLERS
-═══════════════════════════════════════════ */
 function handleYes() {
-  // Any stage → yes page
   if (inDateMode || slides[currentSlide].type === 'date2') {
     goToYesPage();
     return;
@@ -499,11 +466,9 @@ function handleYes() {
 function handleNo() {
   const s = slides[currentSlide];
   if (s.type === 'date2') {
-    // First No on slide 8 → enter date mode stage 0
     renderDateStage(0);
     return;
   }
-  // Normal slides: both yes and no advance
   if (currentSlide < slides.length - 1) {
     renderSlide(currentSlide + 1);
   }
@@ -525,25 +490,19 @@ function goToYesPage() {
   }, 400);
 }
 
-/* ═══════════════════════════════════════════
-   PLACE NO FLOAT NEAR CARD (initial)
-═══════════════════════════════════════════ */
 function placeNoBtnNearCard() {
   const btn  = document.getElementById('noBtnFloat');
   const card = document.getElementById('main-card');
   const cr   = card.getBoundingClientRect();
   btn.style.transition = 'none';
-  // Place below card, right-aligned
   const x = Math.min(cr.right - 130, window.innerWidth - (btn.offsetWidth||110) - 20);
   const y = cr.bottom + 12;
   btn.style.left = Math.max(x, 20) + 'px';
   btn.style.top  = Math.min(y, window.innerHeight - 60) + 'px';
-  // Re-enable transition after placement
   setTimeout(() => {
     btn.style.transition = 'left .32s cubic-bezier(.34,1.56,.64,1), top .32s cubic-bezier(.34,1.56,.64,1), transform .35s, opacity .35s';
   }, 50);
 }
-
 
 function moveNoBtn() {
   const btn    = document.getElementById('noBtnFloat');
@@ -556,9 +515,6 @@ function moveNoBtn() {
   btn.style.top  = (margin + Math.random() * (maxY - margin)) + 'px';
 }
 
-/* ═══════════════════════════════════════════
-   FLOATING HEARTS
-═══════════════════════════════════════════ */
 function buildHearts() {
   const bg     = document.getElementById('heartsBg');
   const emojis = ['💕','💖','💗','🌸','✨','💝','🌹','🎂'];
@@ -574,9 +530,6 @@ function buildHearts() {
   }
 }
 
-/* ═══════════════════════════════════════════
-   CONFETTI
-═══════════════════════════════════════════ */
 const cfColors = ['#e8475f','#f5c6d0','#ffd700','#ff8fab','#c9956a','#fff0f3','#ffb3c1'];
 function fireConfetti() {
   for (let i = 0; i < 100; i++) setTimeout(spawnC, i * 25);
@@ -594,9 +547,6 @@ function spawnC() {
   setTimeout(() => el.remove(), 3800);
 }
 
-/* ═══════════════════════════════════════════
-   SOUND
-═══════════════════════════════════════════ */
 let playing = false;
 function toggleSound() {
   const a = document.getElementById('bgMusic');
@@ -605,13 +555,6 @@ function toggleSound() {
   else { a.play().catch(() => {}); b.textContent = '🔊'; }
   playing = !playing;
 }
-
-window.addEventListener('popstate', () => {
-  if (location.pathname !== '/yes') {
-    document.getElementById('yes-page').style.display  = 'none';
-    document.getElementById('main-card').style.display = 'block';
-  }
-});
 </script>
 </body>
 </html>
